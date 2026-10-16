@@ -1,4 +1,8 @@
-const V="munajat-v1",F=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png"];
+const V="munajat-v2",F=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(F)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
-self.addEventListener("fetch",e=>{if(e.request.method!="GET")return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match("index.html"))))});
+self.addEventListener("fetch",e=>{
+ if(e.request.method!="GET")return;
+ const t=new AbortController();setTimeout(()=>t.abort(),4000);
+ e.respondWith(fetch(e.request,{signal:t.signal}).then(r=>{if(r.ok){const c=r.clone();caches.open(V).then(x=>x.put(e.request,c))}return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match("index.html"))));
+});
