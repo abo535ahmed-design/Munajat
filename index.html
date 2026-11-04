@@ -177,13 +177,6 @@ $("#qc").addEventListener("click",()=>{openM();go(Q.pg)});
 window.mqRef=parseRef;
 window.mqGo=g=>{if(g==null||g<0)return;openM();$("#qsr").value="";go(pageOf(g),g)};
 window.mqb=(d,i)=>d[4]=="q"&&parseRef(d[3])>=0?`<button data-a="mq" data-i="${i}">📖 في المصحف</button>`:"";
-/* تقليب الصفحة بالسحب باللمس */
-{let sx=0,sy=0,st=0,ok=false;const qb=$("#qbody");
-qb.addEventListener("touchstart",e=>{if(view!=="page"||e.touches.length!==1){ok=false;return}const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();ok=true},{passive:true});
-qb.addEventListener("touchend",e=>{if(!ok)return;ok=false;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
-if(Date.now()-st>900||Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
-try{if(String(window.getSelection()))return}catch(x){}
-const n=curPg+(dx<0?1:-1);if(n<1||n>604)return;go(n)},{passive:true});}
 refreshEntry();
 })();
 </script>
